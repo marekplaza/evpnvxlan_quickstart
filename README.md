@@ -1,12 +1,21 @@
-# EVPN-VXLAN Quickstart based on AVD + Containerlab
+# AVD EVPN-VXLAN Quickstart
 
 > **WARNING**  
-> Please read the guide before you start using AVD Quickstart Containerlab.
-> Make sure that you understand the consequences of running Containerlab, cEOS-lab and various scripts provided with this repository on your machine. The components of the lab may change your system settings as they will have super user privileges.
+> Please read the guide before you start using "AVD EVPN-VXLAN Quickstart" labs are based on AVD & Containerlab". In this project, DinD - Docker in Docker concept is used to run Container docker into base docker image with privileges which can harm your host system, for instance:
+>```bash
+>docker run --rm -it --privileged \
+>			--network host \
+>			-v /var/run/docker.sock:/var/run/docker.sock \
+>			-v /etc/hosts:/etc/hosts \
+>			--pid="host" \
+>			-w $(CURRENT_DIR) \
+>			-v $(CURRENT_DIR):$(CURRENT_DIR) \
+>			$(DOCKER_NAME):latest sudo containerlab deploy (...);\
+>```
+> Make sure that you understand the consequences of running Containerlab, cEOS-lab and various scripts provided with this repository on your machine. The components of the lab may change your system settings as they will have super user privileges. 
 
+## Getting Started
 
-
-- EVPN-VxLAN Quickstart
   - [Overview](#overview)
   - [Lab Requirements](#lab-requirements)
   - [MacOS Limitations and Required Settings](#macos-limitations-and-required-settings)
@@ -15,22 +24,17 @@
   - [How To Destroy The Lab](#how-to-destroy-the-lab)
   - [Containerlab Scalability with cEOS](#containerlab-scalability-with-ceos)
 
-## Overview
+### Overview
 
-The AVD Quickstart repository is a collection of Arista EOS labs based on [Containerlab](https://containerlab.srlinux.dev/) that you can build on any machine with Docker in a few minutes.
-The ultimate target of this repository is to provide a **portable Arista lab collection** for everyone. This collection can be used to learn and test certain Arista EOS features and in certain cases even build configs for production environment with the excemption of hardware features.
+The primary goal of this repository is to facilitate the rapid setup ⚡ of EVPN-VxLAN labs using **[Containerlab](https://containerlab.srlinux.dev/)** and cEOS, a containerized version of Arista's EOS software. This setup, which can be brought to life on any machine equipped with Docker, takes only a few minutes.  It serves as a valuable resource for learning, testing various Arista EOS features, and in some cases, even for crafting configurations suitable for production environments, with the exception of hardware-specific features.
 
-Some labs provided in this repository can be used with CloudVision Portal VM that must be deployed separately. But all labs that are not focused on CVP features can be used without such VM as it is quite resource intensive and can not be deployed on an avarage laptop for example.
-
-> **WARNING**: if CVP VM is part of the lab, make sure that it's reachable and credentials configured on CVP are matching the lab.
-
-The initial lab list provided in this repository is focused on learning and testing [AVD](https://avd.sh/en/latest/).
+The initial lab list provided in this repository is focused on learning and testing **[AVD](https://avd.sh/en/latest/)**.
 Some labs can be easily adjusted to your needs using simplified CSV and YAML inputs.
 
-Currently following labs are available:
+Currently following EVPN-VxLAN labs are available:
 
-- AVD repository to build EVPN MLAG network
-- AVD repository to build EVPN Active-Active network
+- AVD repository to build **EVPN MLAG** network
+- AVD repository to build **EVPN ESI Active-Active** network
 
 ## Lab Requirements
 
@@ -38,9 +42,7 @@ A machine with Docker CE or Docker Desktop is required.
 Following operating systems were tested:
 
  - The lab is expected to run on any major Linux distribution.
-
-Hardware requirements depend on the number of containers deployed. Please read [Containerlab Scalability with cEOS](#containerlab-scalability-with-ceos) section before deploying a large topology.
-For a small topology of 10+ cEOS containers 8 vCPUs and 16 GB RAM are recommended.
+ - Hardware requirements depend on the number of containers deployed. For toplogies  of 10+ cEOS containers 8 vCPUs and 16 GB RAM are recommended.
 
 > **WARNING**: Please make sure that your host has enough resorces. Otherwise Containerlab can enter "frozen" state and require Docker / host restart.
 
@@ -91,7 +93,35 @@ run                            Run docker image
 [ ApiusLAB 🧪 ] # 
 ```
 
-6. If cEOS image does not exist on your host yet, download it from [arista.com](https://www.arista.com/) and import. For example: `docker import <path-to-you-download-location>/ cEOS-lab-4.30.4M.tar ceos-lab:4.30.4M`. The image tag must match the parameters defined in the lab files, for example `CSVs_EVPN_AA/clab.yml` or `CSVs_EVPN_MLAG/clab.yml`. You can use `eos-downloader` which is included to this container. To do such use `make run` and execute command as below:
+6. 
+
+
+ - ### Arista cEOS: dockeriazed EOS image
+
+Please remember to download Arista cEOS image and import it to your local docker images repository. You need to have account on arista.com site. The most convient way is to install using... Yes, you are right! We surely use a dockeraized downloader. Firstly, please generate Download Token on your Arista account and export it as env variable `$ARISTA_TOKEN`, then use eos-downlader [eos-downlader](https://github.com/titom73/eos-downloader), as presented below:
+
+```bash
+docker run -it -w $(pwd) -v $(pwd):$(pwd) titom73/eos-downloader:dev --token $ARISTA_TOKEN get eos --image-type cEOS64 --release-type M --latest --log-level debug --output ./
+🪐 eos-downloader is starting...
+    - Image Type: cEOS64
+    - Version: None
+🔎  Searching file cEOS64-lab-4.30.4M.tar.xz
+    -> Found file at /support/download/EOS-USA/Active Releases/4.30/EOS-4.30.4M/cEOS-lab/cEOS64-lab-4.30.4M.tar.xz
+💾  Downloading cEOS64-lab-4.30.4M.tar.xz ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100.0% • 14.7 MB/s • 571.8/571.8 MB • 0:00:43 •
+🚀  Running checksum validation
+🔎  Searching file cEOS64-lab-4.30.4M.tar.xz.sha512sum
+    -> Found file at /support/download/EOS-USA/Active Releases/4.30/EOS-4.30.4M/cEOS-lab/cEOS64-lab-4.30.4M.tar.xz.sha512sum
+💾  Downloading cEOS64-lab-4.30.4M.tar.xz.sha512sum ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100.0% • ? • 155/155 bytes • 0:00:00 •
+✅  Downloaded file is correct.
+✅  processing done !
+```
+
+And import it:
+
+```
+docker import cEOS64-lab-4.30.4M.tar.xz ceos64:4.30.4M
+sha256:488618b63f2c075496655babfea48341045bdfed3871ccd96af1ac38189bab7c
+```
 
 
 7. Use `make build` to build `avd-quickstart:latest` container image. If that was done earlier and the image already exists, you can skip this step. If you are using VSCode devcontainer, VSCode will do that for you automatically.

@@ -172,7 +172,7 @@ clean: ## Remove all Containerlab files and directories
 #	fi
 
 .PHONY: avd_build_eapi
-avd_build_eapi: ## Build configs and configure switches via eAPI: ansible-playbook playbooks/fabric-deploy-eapi.yml 
+avd_build_eapi: ## Build configs and configure switches via eAPI: ansible-playbook playbooks/fabric-deploy-eapi.yml
 	if [ "${_IN_CONTAINER}" = "True" ]; then \
 		cd $(CURRENT_DIR)/${AVD_REPOSITORY_NAME}; ansible-playbook playbooks/fabric-deploy-eapi.yml ; \
 	else \
