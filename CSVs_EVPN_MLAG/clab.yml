@@ -1,0 +1,11 @@
+# containerlab parameters
+# name of the containerlab
+name: avd_lab_mlag
+# cEOS image name:
+ceos_image: ceos64:4.30.4M
+# clab management parameters
+mgmt_network:
+  # clab management network name
+  name: custom_mgmt_mlag
+  # clab management subnet and mask
+  subnet: 192.168.125.0/24
