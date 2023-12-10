@@ -21,7 +21,7 @@ build: ## Build docker image
 	docker build -f $(CURRENT_DIR)/.devcontainer/updateUID.Dockerfile -t $(DOCKER_NAME):latest --build-arg BASE_IMAGE=avd-quickstart-temp-image --build-arg REMOTE_USER=$(USERNAME) --build-arg NEW_UID=$(USER_UID) --build-arg NEW_GID=$(USER_GID) --build-arg IMAGE_USER=$(USERNAME) . ; \
 
 .PHONY: run
-run: ## run docker image
+run: ## Run docker image
 	if [ "${_IN_CONTAINER}" = "True" ]; then \
 		echo "There is no need to run another AVD quickstart container inside AVD quickstart container." ; \
 	else \
@@ -39,7 +39,7 @@ run: ## run docker image
 	fi
 
 .PHONY: inventory_evpn_aa
-inventory_evpn_aa: ## generate inventory for EVPN AA
+inventory_evpn_aa: ## Generate inventory for EVPN AA
 	if [ "${_IN_CONTAINER}" = "True" ]; then \
 		$(CURRENT_DIR)/cook_and_cut.py --input_directory CSVs_EVPN_AA ; \
 	else \
@@ -57,7 +57,7 @@ inventory_evpn_aa: ## generate inventory for EVPN AA
 	fi
 
 .PHONY: inventory_evpn_mlag
-inventory_evpn_mlag: ## generate inventory for EVPN MLAG
+inventory_evpn_mlag: ## Generate inventory for EVPN MLAG
 	if [ "${_IN_CONTAINER}" = "True" ]; then \
 		$(CURRENT_DIR)/cook_and_cut.py --input_directory CSVs_EVPN_MLAG ; \
 	else \ńpń
@@ -75,7 +75,7 @@ inventory_evpn_mlag: ## generate inventory for EVPN MLAG
 	fi
 
 .PHONY: clab_deploy
-clab_deploy: ## Deploy ceos lab
+clab_deploy: ## Deploy Containerlab
 	if [ "${_IN_CONTAINER}" = "True" ]; then \
 		sudo containerlab deploy --debug --topo $(CURRENT_DIR)/${AVD_REPOSITORY_NAME}/clab/$(CLAB_NAME).clab.yml --reconfigure  --timeout 5m ;\
 	else \
@@ -93,7 +93,7 @@ clab_deploy: ## Deploy ceos lab
 	fi
 
 .PHONY: clab_destroy
-clab_destroy: ## Destroy ceos lab
+clab_destroy: ## Destroy Containerlab
 	if [ "${_IN_CONTAINER}" = "True" ]; then \
 		sudo containerlab destroy --debug --topo $(CURRENT_DIR)/${AVD_REPOSITORY_NAME}/clab/$(CLAB_NAME).clab.yml --cleanup ; \
 	else \
@@ -111,7 +111,7 @@ clab_destroy: ## Destroy ceos lab
 	fi
 
 .PHONY: clab_inspect
-clab_inspect: ## Inspect ceos lab
+clab_inspect: ## Inspect Containerlab
 	if [ "${_IN_CONTAINER}" = "True" ]; then \
 		sudo containerlab inspect --topo $(CURRENT_DIR)/${AVD_REPOSITORY_NAME}/clab/$(CLAB_NAME).clab.yml ; \
 	else \
@@ -129,7 +129,7 @@ clab_inspect: ## Inspect ceos lab
 	fi
 
 .PHONY: clab_graph
-clab_graph: ## Build ceos lab graph
+clab_graph: ## Build Containerlab graph
 	if [ "${_IN_CONTAINER}" = "True" ]; then \
 		sudo containerlab graph --topo $(CURRENT_DIR)/${AVD_REPOSITORY_NAME}/clab/$(CLAB_NAME).clab.yml ;\
 	else \
@@ -147,7 +147,7 @@ clab_graph: ## Build ceos lab graph
 	fi
 
 .PHONY: clean
-clean: ## Remove all containerlab files and directories
+clean: ## Remove all Containerlab files and directories
 	sudo rm -rf $(AVD_REPOSITORY_NAME); sudo rm .cookiecutters/cookiecutter.json
 
 #.PHONY: rm
@@ -172,7 +172,7 @@ clean: ## Remove all containerlab files and directories
 #	fi
 
 .PHONY: avd_build_eapi
-avd_build_eapi: ## build configs and configure switches via eAPI
+avd_build_eapi: ## Build configs and configure switches via eAPI: ansible-playbook playbooks/fabric-deploy-eapi.yml 
 	if [ "${_IN_CONTAINER}" = "True" ]; then \
 		cd $(CURRENT_DIR)/${AVD_REPOSITORY_NAME}; ansible-playbook playbooks/fabric-deploy-eapi.yml ; \
 	else \
@@ -208,7 +208,7 @@ avd_build_eapi: ## build configs and configure switches via eAPI
 #	fi
 
 .PHONY: avd_validate
-avd_validate: ## build configs and configure switches via eAPI
+avd_validate: ## Validate states: ansible-playbook playbooks/validate-states.yml
 	if [ "${_IN_CONTAINER}" = "True" ]; then \
 		cd $(CURRENT_DIR)/${AVD_REPOSITORY_NAME}; ansible-playbook playbooks/validate-states.yml ; \
 	else \
@@ -226,7 +226,7 @@ avd_validate: ## build configs and configure switches via eAPI
 	fi
 
 .PHONY: avd_snapshot
-avd_snapshot: ## build configs and configure switches via eAPI
+avd_snapshot: ## Snapshot: ansible-playbook playbooks/snapshot.yml
 	if [ "${_IN_CONTAINER}" = "True" ]; then \
 		cd $(CURRENT_DIR)/${AVD_REPOSITORY_NAME}; ansible-playbook playbooks/snapshot.yml ; \
 	else \

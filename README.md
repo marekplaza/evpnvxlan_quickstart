@@ -1,23 +1,12 @@
-# AVD Quickstart Containerlab
+# EVPN-VXLAN Quickstart based on AVD + Containerlab
 
 > **WARNING**  
 > Please read the guide before you start using AVD Quickstart Containerlab.
 > Make sure that you understand the consequences of running Containerlab, cEOS-lab and various scripts provided with this repository on your machine. The components of the lab may change your system settings as they will have super user privileges.
-> While this repository was tested on a number of machines without doing any harm, have a plan B. You are responsible for your lab machine, not the contributors.
->
-> `"With su power comes great responsibility" (c)`
->
-> ```text
->   /  _  \
-> \_\_(_)_/_/
->  _/ /o\ \_
->    /   \
-> ```
 
-**For M1 MacBooks owners**:  
-> Sorry. Not yet supported.
 
-- [AVD Quickstart Containerlab](#avd-quickstart-containerlab)
+
+- EVPN-VxLAN Quickstart
   - [Overview](#overview)
   - [Lab Requirements](#lab-requirements)
   - [MacOS Limitations and Required Settings](#macos-limitations-and-required-settings)
@@ -48,15 +37,12 @@ Currently following labs are available:
 A machine with Docker CE or Docker Desktop is required.
 Following operating systems were tested:
 
-- Ubuntu LTS Server
-- MacOs (on x86 laptops only)
-The lab is expected to run on any major Linux distribution.
-Please test and contribute by reporting and/or fixing possible issues.
+ - The lab is expected to run on any major Linux distribution.
 
 Hardware requirements depend on the number of containers deployed. Please read [Containerlab Scalability with cEOS](#containerlab-scalability-with-ceos) section before deploying a large topology.
-For a small topology of 10+ cEOS containers 8 vCPUs and 10 GB RAM are recommended.
+For a small topology of 10+ cEOS containers 8 vCPUs and 16 GB RAM are recommended.
 
-> **WARNING**: Please make sure that your host has enough resorces. Otherwise Containerlab can enter "frozen" state and require Docker restart.
+> **WARNING**: Please make sure that your host has enough resorces. Otherwise Containerlab can enter "frozen" state and require Docker / host restart.
 
 To install Docker on a Linux machine, check [this guide](https://docs.docker.com/engine/install/ubuntu/).
 To get Docker Desktop, check [docker.com](https://www.docker.com/products/docker-desktop/).
@@ -75,67 +61,39 @@ The lab setup diagram:
 
 ![lab diagram](media/lab_setup.png)
 
-## MacOS Limitations and Required Settings
 
-> The AVD Quickstart lab is not supported on M1 MacBooks right now.
-
-Prerequisites to stat AVD Quickstart on MacOS:
-
-1. It is recommended to use cEOS-lab 4.28.0F or higher. Earlier cEOS-lab versions require cgroup v1 support. But default, latest Docker Desktop only supports cgroup v2. To enable cgroup v1 support in Docker Desktop, you can uncomment corresponding line in `MacOS_set_DockerDesktop.sh` script before executing it with `make prepare_macos` command.
-2. Docker Desktop must have access to a number directories to run AVD Quickstart environment. Some locations do not even exist on MacOS, but can exist inside the container. That means, they must be present in Docker Desktop settings, but it's not possible to add them via GUI. `make prepare_macos` will add these directories to Docker Desktop `settings.json` and install required tools with `brew`. This tool requires [Homebrew](https://brew.sh/) to be installed first.
-3. Allow full disk access fo Docker Desktop in `System Preferences` > `Security & Privacy`. You can limit that to specific directories, but full disk access is preferred for simplicity.
-
-![full-disk-access](media/full-disk-access.png)
-
-> `make prepare_macos` script is based on the code mentioned in this [Docker Desktop for Mac issue on Github](https://github.com/docker/for-mac/issues/6073). With some modifications to allow access to certain directories and install missing tools.
-
-## Release Notes
-
-- **0.1**
-  - initial release with many shortcuts
-- **0.2**
-  - Fix bugs.
-  - Improve lab topology.
-  - Improve lab workflow.
-  - Add EVPN AA scenario.
-- **0.3**
-  - The lab now only requires Docker. Containerlab installation is not required and will be running inside provided Docker container.
-  - When building container with `make build`, UID and GID will be updated using intermediate container similar to the container used by VSCode devcontainers.
-  - The Dockerfile can be used as VSCode devcontainer or standalone.
-  - The lab environment is now supported and tested on MacOS. x86 MacBooks only.
-  - Dynamic aliases in the container for quick access to lab devices.
 
 ## How To Use The Lab
 
 This section is explaining basic AVD quickstart lab workflow.
 
-1. Clone AVD quickstart repository to your lab host: `git clone https://github.com/arista-netdevops-community/avd-quickstart-containerlab.git` Or use your favorite IDE (like VSCode) for that.
+1. Clone AVD quickstart repository to your lab host: `git clone https://github.com/marekplaza/evpnvxlan_quickstart.git` Or use your favorite IDE (like VSCode) for that.
 2. It is recommended to remove git remote as changes are not supposed to be pushed to the origin: `git remote remove origin`
-3. Change to the lab directory: `cd avd-quickstart-containerlab`. IDE should do that for you automatically.
+3. Change to the lab directory: `cd evpnvxlan_quickstart`. IDE should do that for you automatically.
 4. Before running the lab it is recommended to create a dedicated git branch for you lab experiments to keep original branch clean.
 5. Check makefile help for the list of commands available: `make help`
 
-```zsh
-petr@nuc10i7:~/avd-quickstart-containerlab$ make help
-avd_build_cvp                  build configs and configure switches via eAPI
-avd_build_eapi                 build configs and configure switches via eAPI
-avd_snapshot                   build configs and configure switches via eAPI
-avd_validate                   build configs and configure switches via eAPI
+```bash
+[ ApiusLAB 🧪 ] # make
+avd_build_eapi                 Build configs and configure switches via eAPI: ansible-playbook playbooks/fabric-deploy-eapi.yml 
+avd_snapshot                   Snapshot: ansible-playbook playbooks/snapshot.yml
+avd_validate                   Validate states: ansible-playbook playbooks/validate-states.yml
 build                          Build docker image
-clab_deploy                    Deploy ceos lab
-clab_destroy                   Destroy ceos lab
-clab_graph                     Build lab graph
-clean                          Remove all containerlab files and directories
+clab_deploy                    Deploy Containerlab
+clab_destroy                   Destroy Containerlab
+clab_graph                     Build Containerlab graph
+clab_inspect                   Inspect Containerlab
+clean                          Remove all Containerlab files and directories
 help                           Display help message
-inventory_evpn_aa              onboard devices to CVP
-inventory_evpn_mlag            onboard devices to CVP
-onboard                        onboard devices to CVP
-prepare_mac_os                 Prepare Docker Desktop on MacOS for cEOS-based Containerlab
-rm                             Remove all containerlab files and directories
-run                            run docker image, if the image is not present - build it first
+inventory_evpn_aa              Generate inventory for EVPN AA
+inventory_evpn_mlag            Generate inventory for EVPN MLAG
+run                            Run docker image
+[ ApiusLAB 🧪 ] # 
 ```
 
-6. If cEOS image does not exist on your host yet, download it from [arista.com](https://www.arista.com/) and import. For example: `docker import <path-to-you-download-location>/ cEOS-lab-4.27.0F.tar ceos-lab:4.27.0F`. The image tag must match the parameters defined in the lab files, for example `CSVs_EVPN_AA/clab.yml` or `CSVs_EVPN_MLAG/clab.yml`.
+6. If cEOS image does not exist on your host yet, download it from [arista.com](https://www.arista.com/) and import. For example: `docker import <path-to-you-download-location>/ cEOS-lab-4.30.4M.tar ceos-lab:4.30.4M`. The image tag must match the parameters defined in the lab files, for example `CSVs_EVPN_AA/clab.yml` or `CSVs_EVPN_MLAG/clab.yml`. You can use `eos-downloader` which is included to this container. To do such use `make run` and execute command as below:
+
+
 7. Use `make build` to build `avd-quickstart:latest` container image. If that was done earlier and the image already exists, you can skip this step. If you are using VSCode devcontainer, VSCode will do that for you automatically.
 8. (Optional) If VSCode devcontainer is used, the container will start automatically. Otherwise you can start it manually in the interactive mode by entering `make run`. You can also skip this steps and execute all commands listed below directly on your host. They will run inside a non-interactive container in that case.
 9. Build lab inventory with `make inventory_evpn_aa` (EVPN Active-Active scenario) or `make inventory_evpn_mlag` (EVPN MLAG scenario). This will create a directory with all files required to build the lab.
