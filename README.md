@@ -19,6 +19,7 @@
   - [Overview](#overview)
   - [Lab Requirements](#lab-requirements)
   - [Lab Topology](#lab-topology)
+  - [How To Use Start](#how-to-start)
   - [How To Use The Lab](#how-to-use-the-lab)
   - [How To Destroy The Lab](#how-to-destroy-the-lab)
 
@@ -53,11 +54,11 @@ The lab setup diagram:
 ![lab diagram1](media/lab_topology.excalidraw.png)
 
 
-## How To Use The Lab
+## How To Start
 
 This section is explaining basic AVD quickstart lab workflow.
 
-1. Clone AVD quickstart repository to your lab host: `git clone https://github.com/marekplaza/evpnvxlan_quickstart.git` Or use your favorite IDE (like VSCode) for that.
+1. Clone repository to your lab host: `git clone https://github.com/marekplaza/evpnvxlan_quickstart.git` Or use your favorite IDE (like VSCode) for that.
 2. It is recommended to remove git remote as changes are not supposed to be pushed to the origin: `git remote remove origin`
 3. Change to the lab directory: `cd evpnvxlan_quickstart`. IDE should do that for you automatically.
 4. Before running the lab it is recommended to create a dedicated git branch for you lab experiments to keep original branch clean.
@@ -89,17 +90,17 @@ run                            Run docker image
 Please remember to download Arista cEOS image and import it to your local docker images repository. You need to have account on arista.com site. The most convient way is to install using... Yes, you are right! We surely use a dockeraized downloader. Firstly, please generate Download Token on your Arista account and export it as env variable `$ARISTA_TOKEN`, then use eos-downlader [eos-downlader](https://github.com/titom73/eos-downloader), as presented below:
 
 ```bash
-docker run -it -w $(pwd) -v $(pwd):$(pwd) titom73/eos-downloader:dev --token $ARISTA_TOKEN get eos --image-type cEOS64 --release-type M --latest --log-level debug --output ./
+[ ApiusLAB 🧪 ] # ardl --token $ARISTA_TOKEN get eos --image-type cEOS64 --release-type M --latest --log-level debug --output ./
 🪐 eos-downloader is starting...
     - Image Type: cEOS64
     - Version: None
 🔎  Searching file cEOS64-lab-4.30.4M.tar.xz
     -> Found file at /support/download/EOS-USA/Active Releases/4.30/EOS-4.30.4M/cEOS-lab/cEOS64-lab-4.30.4M.tar.xz
-💾  Downloading cEOS64-lab-4.30.4M.tar.xz ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100.0% • 14.7 MB/s • 571.8/571.8 MB • 0:00:43 •
+💾  Downloading cEOS64-lab-4.30.4M.tar.xz ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100.0% • 11.6 MB/s • 571.8/571.8 MB • 0:00:42 •
 🚀  Running checksum validation
 🔎  Searching file cEOS64-lab-4.30.4M.tar.xz.sha512sum
     -> Found file at /support/download/EOS-USA/Active Releases/4.30/EOS-4.30.4M/cEOS-lab/cEOS64-lab-4.30.4M.tar.xz.sha512sum
-💾  Downloading cEOS64-lab-4.30.4M.tar.xz.sha512sum ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100.0% • ? • 155/155 bytes • 0:00:00 •
+💾  Downloading cEOS64-lab-4.30.4M.tar.xz.sha512sum ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100.0% • ? • 155/155 bytes • 0:00:00 •
 ✅  Downloaded file is correct.
 ✅  processing done !
 ```
@@ -107,7 +108,7 @@ docker run -it -w $(pwd) -v $(pwd):$(pwd) titom73/eos-downloader:dev --token $AR
 And import it:
 
 ```
-docker import cEOS64-lab-4.30.4M.tar.xz ceos64:4.30.4M
+[ ApiusLAB 🧪 ] # docker import cEOS64-lab-4.30.4M.tar.xz ceos64:4.30.4M
 sha256:488618b63f2c075496655babfea48341045bdfed3871ccd96af1ac38189bab7c
 ```
 
