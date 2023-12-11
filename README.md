@@ -44,14 +44,13 @@ Following operating systems were tested:
 
 > **WARNING**: Please make sure that your host has enough resorces. Otherwise Containerlab can enter "frozen" state and require Docker / host restart.
 
-To install Docker on a Linux machine, check [this guide](https://docs.docker.com/engine/install/ubuntu/).
-To get Docker Desktop, check [docker.com](https://www.docker.com/products/docker-desktop/).
+To install Docker on a Linux machine, please check [this guide](https://docs.docker.com/engine/install).
 
 
 ### Lab Topology
 The lab setup diagram:
 
-![lab diagram](media/evpnvxlan_lab.excalidraw.png)
+![lab diagram1](media/lab_topology.excalidraw.png)
 
 
 ## How To Use The Lab
