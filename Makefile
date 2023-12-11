@@ -1,5 +1,6 @@
 CURRENT_DIR := $(shell pwd)
-DOCKER_NAME ?= avd-quickstart
+#DOCKER_NAME ?= avd-quickstart
+DOCKER_NAME ?= avd-evpnvxlan
 USERNAME := avd
 USER_UID ?= $(shell id -u)
 USER_GID ?= $(shell id -g)
