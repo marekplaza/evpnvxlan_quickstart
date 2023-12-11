@@ -42,6 +42,7 @@ Following operating systems were tested:
 
  - The lab is expected to run on any major Linux distribution.
  - Hardware requirements depend on the number of containers deployed. For toplogies  of 10+ cEOS containers 8 vCPUs and 16 GB RAM are recommended.
+ - cEOS image. Go to section [Download cEOS image](#Download-cEOS-image) to find out how to do it
 
 > **WARNING**: Please make sure that your host has enough resorces. Otherwise Containerlab can enter "frozen" state and require Docker / host restart.
 
@@ -58,34 +59,30 @@ The lab setup diagram:
 
 This section is explaining basic AVD quickstart lab workflow.
 
-1. Clone repository to your lab host: `git clone https://github.com/marekplaza/evpnvxlan_quickstart.git` Or use your favorite IDE (like VSCode) for that.
-2. It is recommended to remove git remote as changes are not supposed to be pushed to the origin: `git remote remove origin`
-3. Change to the lab directory: `cd evpnvxlan_quickstart`. IDE should do that for you automatically.
-4. Before running the lab it is recommended to create a dedicated git branch for you lab experiments to keep original branch clean.
-5. Check makefile help for the list of commands available: `make help`
+ - Clone repository to your lab host: `git clone https://github.com/marekplaza/evpnvxlan_quickstart.git` Or use your favorite IDE (like VSCode) for that.
+ - It is recommended to remove git remote as changes are not supposed to be pushed to the origin: `git remote remove origin`
+ - Change to the lab directory: `cd evpnvxlan_quickstart`. IDE should do that for you automatically.
+ - Before running the lab it is recommended to create a dedicated git branch for you lab experiments to keep original branch clean.
+ - Check makefile help for the list of commands available: `make help`. The best option is issue: `make run`, to build your image and get inside docker whith easy access to all necessary tools
 
-```bash
-[ ApiusLAB 🧪 ] # make
-avd_build_eapi                 Build configs and configure switches via eAPI: ansible-playbook playbooks/fabric-deploy-eapi.yml 
-avd_snapshot                   Snapshot: ansible-playbook playbooks/snapshot.yml
-avd_validate                   Validate states: ansible-playbook playbooks/validate-states.yml
-build                          Build docker image
-clab_deploy                    Deploy Containerlab
-clab_destroy                   Destroy Containerlab
-clab_graph                     Build Containerlab graph
-clab_inspect                   Inspect Containerlab
-clean                          Remove all Containerlab files and directories
-help                           Display help message
-inventory_evpn_aa              Generate inventory for EVPN AA
-inventory_evpn_mlag            Generate inventory for EVPN MLAG
-run                            Run docker image
-[ ApiusLAB 🧪 ] # 
-```
+    ```bash
+    [ ApiusLAB 🧪 ] # make 
+    avd_build_eapi                 Build configs and configure switches via eAPI: ansible-playbook playbooks/fabric-deploy-eapi.yml
+    avd_snapshot                   Snapshot: ansible-playbook playbooks/snapshot.yml
+    avd_validate                   Validate states: ansible-playbook playbooks/validate-states.yml
+    build                          Build docker image
+    clab_deploy                    Deploy Containerlab
+    clab_destroy                   Destroy Containerlab
+    clab_graph                     Build Containerlab graph
+    clab_inspect                   Inspect Containerlab
+    clean                          Remove all Containerlab files and directories
+    help                           Display help message
+    inventory_evpn_aa              Generate inventory for EVPN AA
+    inventory_evpn_mlag            Generate inventory for EVPN MLAG
+    run                            Run docker image
+    ```
 
-6. 
-
-
- - ### Arista cEOS: dockeriazed EOS image
+## Download cEOS image
 
 Please remember to download Arista cEOS image and import it to your local docker images repository. You need to have account on arista.com site. The most convient way is to install using... Yes, you are right! We surely use a dockeraized downloader. Firstly, please generate Download Token on your Arista account and export it as env variable `$ARISTA_TOKEN`, then use eos-downlader [eos-downlader](https://github.com/titom73/eos-downloader), as presented below:
 
@@ -109,7 +106,7 @@ And import it:
 
 ```
 [ ApiusLAB 🧪 ] # docker import cEOS64-lab-4.30.4M.tar.xz ceos64:4.30.4M
-sha256:488618b63f2c075496655babfea48341045bdfed3871ccd96af1ac38189bab7c
+sha256:488618b63f2c075496655babfea48341045bdfed3871ccd96af1ac38189bab7d
 ```
 
 
