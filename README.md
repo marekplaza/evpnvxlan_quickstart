@@ -133,7 +133,7 @@ leaf1  leaf2  leaf3  leaf4
 17. You can also collect as snapshot (series of pre-defined show commands) with `make avd_snapshot`.
 18. You can optionally git commit the changes and start playing with the lab. Use CSVs to add some VLANs, etc. for example. Re-generate the inventory and check how the AVD repository data changes.
 
-## How To Destroy The Lab
+## How To Clean Up The Lab
 
 1. Execute `make clab_destroy` to destroy the containerlab.
 2. Execute `make clean` to delete the generated AVD inventory.
