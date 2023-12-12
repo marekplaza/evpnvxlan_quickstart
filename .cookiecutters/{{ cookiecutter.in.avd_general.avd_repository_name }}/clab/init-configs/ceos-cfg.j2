@@ -1,10 +1,7 @@
 no aaa root
 !
-username cvpadmin privilege 15 role network-admin secret arista123
+username cvpadmin privilege 15 role network-admin secret Apiuslab.123!
 !
-daemon TerminAttr
-   exec /usr/bin/TerminAttr -cvaddr=192.168.122.241:9910 -cvauth=key, -cvvrf=MGMT -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -taillogs
-   no shutdown
 !
 vrf instance MGMT
 !
@@ -21,10 +18,10 @@ management api http-commands
 !
 interface Management0
    vrf MGMT
-   {{ if .MgmtIPv4Address }}   ip address {{ .MgmtIPv4Address }}/{{ .MgmtIPv4PrefixLength }}{{end}}
+   {{ if .MgmtIPv4Address }}  ip address {{ .MgmtIPv4Address }}/{{ .MgmtIPv4PrefixLength }}{{end}}
 !
 no ip routing vrf MGMT
 !
-ip route vrf MGMT 0.0.0.0/0 192.168.123.1
+{{ if .MgmtIPv4Gateway }}ip route vrf MGMT 0.0.0.0/0 {{ .MgmtIPv4Gateway }}{{end}}
 !
 end
