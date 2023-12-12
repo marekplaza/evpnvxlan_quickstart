@@ -10,7 +10,6 @@ RUN apt-get update && apt-get install -y \
     vim \
     && rm -rf /var/lib/apt/lists/* 
 
-
 # _IN_CONTAINER env variable will be used by make shortcuts
 # to detect if command must be executed directly or as part of the docker run
 ENV _IN_CONTAINER="True"

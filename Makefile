@@ -61,7 +61,7 @@ inventory_evpn_aa: ## Generate inventory for EVPN AA
 inventory_evpn_mlag: ## Generate inventory for EVPN MLAG
 	if [ "${_IN_CONTAINER}" = "True" ]; then \
 		$(CURRENT_DIR)/cook_and_cut.py --input_directory CSVs_EVPN_MLAG ; \
-	else \ńpń
+	else \
 		docker run --rm -it --privileged \
 			--network host \
 			-v /var/run/docker.sock:/var/run/docker.sock \
@@ -76,40 +76,38 @@ inventory_evpn_mlag: ## Generate inventory for EVPN MLAG
 	fi
 
 .PHONY: clab_deploy
-clab_deploy: ## Deploy Containerlab
-	if [ "${_IN_CONTAINER}" = "True" ]; then \
-		sudo containerlab deploy --debug --topo $(CURRENT_DIR)/${AVD_REPOSITORY_NAME}/clab/$(CLAB_NAME).clab.yml --reconfigure  --timeout 5m ;\
-	else \
-		docker run --rm -it --privileged \
-			--network host \
-			-v /var/run/docker.sock:/var/run/docker.sock \
-			-v /etc/hosts:/etc/hosts \
-			--pid="host" \
-			-w $(CURRENT_DIR) \
-			-v $(CURRENT_DIR):$(CURRENT_DIR) \
-			-v /etc/sysctl.d/99-zceos.conf:/etc/sysctl.d/99-zceos.conf:ro \
-			-e AVD_GIT_USER="$(shell git config --get user.name)" \
-			-e AVD_GIT_EMAIL="$(shell git config --get user.email)" \
-			$(DOCKER_NAME):latest sudo containerlab deploy --debug --topo $(CURRENT_DIR)/${AVD_REPOSITORY_NAME}/clab/$(CLAB_NAME).clab.yml  --reconfigure  --timeout 5m ;\
-	fi
+clab_deploy: ## Deploy ceos lab
+	docker run --rm -it --privileged \
+		--network host \
+		-v /var/run/docker.sock:/var/run/docker.sock \
+		-v /etc/hosts:/etc/hosts \
+		-v /var/run/netns:/var/run/netns \
+		-v /var/lib/docker/containers:/var/lib/docker/containers \
+		--pid="host" \
+		-w $(CURRENT_DIR) \
+		-v $(CURRENT_DIR):$(CURRENT_DIR) \
+		-v /etc/sysctl.d/99-zceos.conf:/etc/sysctl.d/99-zceos.conf:ro \
+		-e AVD_GIT_USER="$(shell git config --get user.name)" \
+		-e AVD_GIT_EMAIL="$(shell git config --get user.email)" \
+		ghcr.io/srl-labs/clab clab deploy --debug --topo $(CURRENT_DIR)/${AVD_REPOSITORY_NAME}/clab/$(CLAB_NAME).clab.yml --reconfigure ;\
+	
 
 .PHONY: clab_destroy
-clab_destroy: ## Destroy Containerlab
-	if [ "${_IN_CONTAINER}" = "True" ]; then \
-		sudo containerlab destroy --debug --topo $(CURRENT_DIR)/${AVD_REPOSITORY_NAME}/clab/$(CLAB_NAME).clab.yml --cleanup ; \
-	else \
-		docker run --rm -it --privileged \
-			--network host \
-			-v /var/run/docker.sock:/var/run/docker.sock \
-			-v /etc/hosts:/etc/hosts \
-			--pid="host" \
-			-w $(CURRENT_DIR) \
-			-v $(CURRENT_DIR):$(CURRENT_DIR) \
-			-v /etc/sysctl.d/99-zceos.conf:/etc/sysctl.d/99-zceos.conf:ro \
-			-e AVD_GIT_USER="$(shell git config --get user.name)" \
-			-e AVD_GIT_EMAIL="$(shell git config --get user.email)" \
-			test_clab:latest sudo containerlab destroy --debug --topo $(CURRENT_DIR)/${AVD_REPOSITORY_NAME}/clab/$(CLAB_NAME).clab.yml --cleanup ; \
-	fi
+clab_destroy: ## Destroy ceos lab
+	sudo docker run --rm -it --privileged \
+		--network host \
+		-v /var/run/docker.sock:/var/run/docker.sock \
+		-v /etc/hosts:/etc/hosts \
+		-v /var/run/netns:/var/run/netns \
+		-v /var/lib/docker/containers:/var/lib/docker/containers \
+		--pid="host" \
+		-w $(CURRENT_DIR) \
+		-v $(CURRENT_DIR):$(CURRENT_DIR) \
+		-v /etc/sysctl.d/99-zceos.conf:/etc/sysctl.d/99-zceos.conf:ro \
+		-e AVD_GIT_USER="$(shell git config --get user.name)" \
+		-e AVD_GIT_EMAIL="$(shell git config --get user.email)" \
+		ghcr.io/srl-labs/clab clab destroy --debug --topo $(CURRENT_DIR)/${AVD_REPOSITORY_NAME}/clab/$(CLAB_NAME).clab.yml --cleanup ; \
+	
 
 .PHONY: clab_inspect
 clab_inspect: ## Inspect Containerlab
@@ -157,7 +155,7 @@ clean: ## Remove all Containerlab files and directories
 #.PHONY: onboard
 #onboard: ## onboard devices to CVP
 #	if [ "${_IN_CONTAINER}" = "True" ]; then \
-#		$(CURRENT_DIR)/onboard_devices_to_cvp.py ; \
+#		python3 $(CURRENT_DIR)/$(AVD_REPOSITORY_NAME)/onboard_devices_to_cvp.py ; \
 #	else \
 #		docker run --rm -it --privileged \
 #			--network host \
