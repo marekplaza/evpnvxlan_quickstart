@@ -3,7 +3,7 @@ name: {{ cookiecutter.in.clab.name }}
 mgmt:
   network: {{ cookiecutter.in.clab.mgmt_network.name }}
   ipv4-subnet: {{ cookiecutter.in.clab.mgmt_network.subnet }}
-  ipv4-gateway: {{ cookiecutter.in.clab.mgmt_network.gateway }}
+  ipv4-gw: {{ cookiecutter.in.clab.mgmt_network.gateway }}
   external-access: true
 
 topology:
