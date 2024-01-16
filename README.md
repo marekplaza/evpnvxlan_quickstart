@@ -80,7 +80,7 @@ sha256:488618b63f2c075496655babfea48341045bdfed3871ccd96af1ac38189bab7d
 ### Lab Topology
 The lab setup diagram:
 
-![lab diagram1](media/lab_topology.excalidraw.png)
+![lab diagram1](media/evpnvxlan_lab_full.excalidraw.png)
 
 ## How To Start
 
