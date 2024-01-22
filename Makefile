@@ -188,23 +188,23 @@ avd_build_eapi: ## Build configs and configure switches via eAPI: ansible-playbo
 			$(DOCKER_NAME):latest ansible-playbook playbooks/fabric-deploy-eapi.yml ; \
 	fi
 
-#.PHONY: avd_build_cvp
-#avd_build_cvp: ## build configs and configure switches via eAPI
-#	if [ "${_IN_CONTAINER}" = "True" ]; then \
-#		cd $(CURRENT_DIR)/${AVD_REPOSITORY_NAME}; ansible-playbook playbooks/fabric-deploy-cvp.yml ; \
-#	else \
-#		docker run --rm -it --privileged \
-#			--network host \
-#			-v /var/run/docker.sock:/var/run/docker.sock \
-#			-v /etc/hosts:/etc/hosts \
-#			--pid="host" \
-#			-w $(CURRENT_DIR)/${AVD_REPOSITORY_NAME} \
-#			-v $(CURRENT_DIR):$(CURRENT_DIR) \
-#			-v $(CURRENT_DIR)/99-zceos.conf:/etc/sysctl.d/99-zceos.conf:ro \
-#			-e AVD_GIT_USER="$(shell git config --get user.name)" \
-#			-e AVD_GIT_EMAIL="$(shell git config --get user.email)" \
-#			$(DOCKER_NAME):latest ansible-playbook playbooks/fabric-deploy-cvp.yml ; \
-#	fi
+.PHONY: avd_build_cvp
+avd_build_cvp: ## build configs and configure switches via eAPI
+	if [ "${_IN_CONTAINER}" = "True" ]; then \
+		cd $(CURRENT_DIR)/${AVD_REPOSITORY_NAME}; ansible-playbook playbooks/fabric-deploy-cvp.yml ; \
+	else \
+		docker run --rm -it --privileged \
+			--network host \
+			-v /var/run/docker.sock:/var/run/docker.sock \
+			-v /etc/hosts:/etc/hosts \
+			--pid="host" \
+			-w $(CURRENT_DIR)/${AVD_REPOSITORY_NAME} \
+			-v $(CURRENT_DIR):$(CURRENT_DIR) \
+			-v $(CURRENT_DIR)/99-zceos.conf:/etc/sysctl.d/99-zceos.conf:ro \
+			-e AVD_GIT_USER="$(shell git config --get user.name)" \
+			-e AVD_GIT_EMAIL="$(shell git config --get user.email)" \
+			$(DOCKER_NAME):latest ansible-playbook playbooks/fabric-deploy-cvp.yml ; \
+	fi
 
 .PHONY: avd_validate
 avd_validate: ## Validate states: ansible-playbook playbooks/validate-states.yml
