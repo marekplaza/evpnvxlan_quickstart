@@ -20,7 +20,7 @@ interface Management0
    vrf MGMT
    {{ if .MgmtIPv4Address }}  ip address {{ .MgmtIPv4Address }}/{{ .MgmtIPv4PrefixLength }}{{end}}
 !
-no ip routing vrf MGMT
+ip routing vrf MGMT
 !
 {{ if .MgmtIPv4Gateway }}ip route vrf MGMT 0.0.0.0/0 {{ .MgmtIPv4Gateway }}{{end}}
 !

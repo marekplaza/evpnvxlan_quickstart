@@ -152,23 +152,23 @@ clean: ## Remove all Containerlab files and directories
 #.PHONY: rm
 #rm: clean ## Remove all containerlab files and directories
 
-#.PHONY: onboard
-#onboard: ## onboard devices to CVP
-#	if [ "${_IN_CONTAINER}" = "True" ]; then \
-#		python3 $(CURRENT_DIR)/$(AVD_REPOSITORY_NAME)/onboard_devices_to_cvp.py ; \
-#	else \
-#		docker run --rm -it --privileged \
-#			--network host \
-#			-v /var/run/docker.sock:/var/run/docker.sock \
-#			-v /etc/hosts:/etc/hosts \
-#			--pid="host" \
-#			-w $(CURRENT_DIR) \
-#			-v $(CURRENT_DIR):$(CURRENT_DIR) \
-#			-v $(CURRENT_DIR)/99-zceos.conf:/etc/sysctl.d/99-zceos.conf:ro \
-#			-e AVD_GIT_USER="$(shell git config --get user.name)" \
-#			-e AVD_GIT_EMAIL="$(shell git config --get user.email)" \
-#			$(DOCKER_NAME):latest $(CURRENT_DIR)/onboard_devices_to_cvp.py ; \
-#	fi
+.PHONY: onboard
+onboard: ## onboard devices to CVP
+	if [ "${_IN_CONTAINER}" = "True" ]; then \
+		python3 $(CURRENT_DIR)/$(AVD_REPOSITORY_NAME)/onboard_devices_to_cvp.py ; \
+	else \
+		docker run --rm -it --privileged \
+			--network host \
+			-v /var/run/docker.sock:/var/run/docker.sock \
+			-v /etc/hosts:/etc/hosts \
+			--pid="host" \
+			-w $(CURRENT_DIR) \
+			-v $(CURRENT_DIR):$(CURRENT_DIR) \
+			-v $(CURRENT_DIR)/99-zceos.conf:/etc/sysctl.d/99-zceos.conf:ro \
+			-e AVD_GIT_USER="$(shell git config --get user.name)" \
+			-e AVD_GIT_EMAIL="$(shell git config --get user.email)" \
+			$(DOCKER_NAME):latest $(CURRENT_DIR)/onboard_devices_to_cvp.py ; \
+	fi
 
 .PHONY: avd_build_eapi
 avd_build_eapi: ## Build configs and configure switches via eAPI: ansible-playbook playbooks/fabric-deploy-eapi.yml

@@ -8,5 +8,5 @@ mgmt_network:
   # clab management network name
   name: custom_mgmt
   # clab management subnet and mask
-  subnet: 192.168.123.0/24
-  gateway: 192.168.123.1
+  subnet: 172.20.123.0/24
+  gateway: 172.20.123.1

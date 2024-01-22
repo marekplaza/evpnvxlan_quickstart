@@ -20,10 +20,10 @@ interface Management0
    {{ if .MgmtIPv4Address }}   ip address {{ .MgmtIPv4Address }}/{{ .MgmtIPv4PrefixLength }}{{end}}
 !
 ip routing
-no ip routing vrf MGMT
+ip routing vrf MGMT
 !
 ip route 0.0.0.0/0 10.100.150.1
-ip route vrf MGMT 0.0.0.0/0 192.168.123.1
+{{ if .MgmtIPv4Gateway }}ip route vrf MGMT 0.0.0.0/0 {{ .MgmtIPv4Gateway }}{{end}}
 !
 interface Port-Channel1
    no switchport
