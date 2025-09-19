@@ -143,3 +143,4 @@ This section is explaining basic AVD quickstart lab workflow.
 - Execute `make clab_destroy` to destroy the containerlab.
 - Execute `make clean` to delete the generated AVD inventory.
 
+:)
